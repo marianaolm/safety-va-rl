@@ -1,0 +1,57 @@
+# Python / environment
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+.env
+.env.*
+
+# IDE / editor
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+
+# SLURM / cluster outputs
+cluster/job_*.out
+cluster/job_*.err
+
+# Experiment outputs
+experiments/
+
+
+# Models / checkpoints
+**/model/
+**/*.zip
+**/*.pt
+**/*.pth
+
+# Logs / training traces
+**/logs/
+**/tb/
+**/torch_save/
+**/progress.csv
+
+# Evaluation outputs
+**/final_eval/
+**/metrics/
+
+# Videos
+**/videos/
+**/*.mp4
+**/*.meta.json
+
+# Sweep runtime artifacts
+**/sweep_trial_*/
+**/sweep_trial.json
+
+# Databases / cached results
+*.db
+*.sqlite
+*.sqlite3
+
+# Temporary / misc
+tmp/
+temp/

@@ -1,0 +1,33 @@
+#!/bin/bash
+#SBATCH --job-name=job
+#SBATCH --output=cluster/%x_%j.out
+#SBATCH --error=cluster/%x_%j.err
+#SBATCH --partition=P100
+#SBATCH --gres=gpu:1
+#SBATCH --cpus-per-task=5
+#SBATCH --mem=20G
+#SBATCH --time=30:00:00
+
+set -euo pipefail
+
+echo "Starting job on node: $(hostname)"
+echo "Job started at: $(date)"
+echo "Workdir: ${SLURM_SUBMIT_DIR}"
+
+cd "${SLURM_SUBMIT_DIR}"
+
+cd "$(git rev-parse --show-toplevel)"
+source .venv/bin/activate
+
+export MUJOCO_GL=egl
+export N_ENVS=4        
+
+
+export OMP_NUM_THREADS=1
+export MKL_NUM_THREADS=1
+export OPENBLAS_NUM_THREADS=1
+export NUMEXPR_NUM_THREADS=1
+
+srun python -m scripts/train.py ppolag_3m500k
+
+echo "Job finished at: $(date)"

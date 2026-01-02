@@ -28,6 +28,6 @@ export MKL_NUM_THREADS=1
 export OPENBLAS_NUM_THREADS=1
 export NUMEXPR_NUM_THREADS=1
 
-srun python -m scripts/train.py ppolag_3m500k
+srun python scripts/train.py ppolag_15k
 
 echo "Job finished at: $(date)"

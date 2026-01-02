@@ -19,7 +19,9 @@ cluster/job_*.out
 cluster/job_*.err
 
 # Experiment outputs
-experiments/
+experiments/ppo
+experiments/sac 
+experiments/ppolag 
 
 
 # Models / checkpoints
@@ -33,10 +35,6 @@ experiments/
 **/tb/
 **/torch_save/
 **/progress.csv
-
-# Evaluation outputs
-**/final_eval/
-**/metrics/
 
 # Videos
 **/videos/

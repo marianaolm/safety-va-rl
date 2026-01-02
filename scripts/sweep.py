@@ -28,7 +28,12 @@ def main():
 
     run_sb3_sweep(
         study_name=sweep_name,
-        storage_path=Path("sweeps") / f"{sweep_name}.db",
+        storage_path = (
+            Path("experiments/sweeps")
+            / sweep["algorithm"]
+            / sweep["env_id"]
+            / f"{sweep_name}.db"
+        ),
         spec=spec,
         n_trials=sweep["n_trials"],
         lambda_cost=sweep.get("lambda_cost", 1.0),

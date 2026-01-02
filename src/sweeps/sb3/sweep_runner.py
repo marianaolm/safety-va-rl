@@ -21,6 +21,7 @@ def run_sb3_sweep(study_name: str, storage_path: Path, spec, n_trials: int = 10,
         hparams = spec.sample_hyperparams(trial)
         exp = spec.build_exp(hparams)
         exp["device"] = exp.get("device", "cuda")
+        exp["seed"] = trial.number
 
         base_dir = get_run_dir(exp)
         run_dir = base_dir / f"sweep_trial_{trial.number:03d}"
@@ -28,7 +29,7 @@ def run_sb3_sweep(study_name: str, storage_path: Path, spec, n_trials: int = 10,
 
         spec.train(exp, run_dir)
 
-        results = run_sb3_final_eval(exp, run_dir, n_episodes=30)
+        results = run_sb3_final_eval(exp, run_dir, n_episodes=50)
 
         reward = results["reward"]["mean"]
         cost = results["cost"]["mean"]

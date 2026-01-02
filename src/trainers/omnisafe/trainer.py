@@ -24,6 +24,7 @@ def train_omnisafe(
     log_dir.mkdir(parents=True, exist_ok=True)
 
     custom_cfgs = dict(custom_cfgs) 
+    
     custom_cfgs["logger_cfgs"] = {
         "log_dir": str(log_dir),
         "use_tensorboard": True,
@@ -32,7 +33,7 @@ def train_omnisafe(
 
     agent = omnisafe.Agent(algo, env_id, custom_cfgs=custom_cfgs,)
 
-    print(f"[OmniSafe] Training {algo} on {env_id}")
+    print(f"Training {algo} on {env_id}")
     agent.learn()
 
     return agent

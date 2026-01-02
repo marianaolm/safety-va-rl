@@ -30,6 +30,6 @@ export NUMEXPR_NUM_THREADS=1
 export MUJOCO_GL=egl
 
 # Run experiment
-srun python -m scripts/evaluate.py sac_2m500k final
+srun python scripts/evaluate.py ppolag_5k
 
 echo "Job finished at: $(date)"

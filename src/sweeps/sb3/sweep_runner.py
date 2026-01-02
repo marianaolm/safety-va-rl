@@ -11,7 +11,7 @@ def run_sb3_sweep(study_name: str, storage_path: Path, spec, n_trials: int = 10,
     storage = f"sqlite:///{storage_path}"
 
     study = optuna.create_study(
-        study_name=study_name,
+        study_name=study_name, 
         direction="maximize",
         storage=storage,
         load_if_exists=True,
@@ -33,6 +33,8 @@ def run_sb3_sweep(study_name: str, storage_path: Path, spec, n_trials: int = 10,
 
         reward = results["reward"]["mean"]
         cost = results["cost"]["mean"]
+
+        # Objective
         objective_value = reward - lambda_cost * cost
 
         trial.set_user_attr("reward_mean", reward)
@@ -63,5 +65,3 @@ def run_sb3_sweep(study_name: str, storage_path: Path, spec, n_trials: int = 10,
     summary_path = storage_path.parent / f"{study_name}_summary.json"
     with open(summary_path, "w") as f:
         json.dump(summary, f, indent=2)
-
-    print(f"Summary saved to {summary_path}")

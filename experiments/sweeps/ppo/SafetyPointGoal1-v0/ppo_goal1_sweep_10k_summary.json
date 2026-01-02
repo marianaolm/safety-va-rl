@@ -1,0 +1,13 @@
+{
+  "best_value": -26.516859074615866,
+  "best_params": {
+    "learning_rate": 0.00026997485001533256,
+    "n_steps": 2048,
+    "batch_size": 256,
+    "gamma": 0.9922757221890235,
+    "clip_range": 0.15056033064635221
+  },
+  "best_reward": -12.836859074615864,
+  "best_cost": 13.68,
+  "best_run_dir": "experiments/ppo/SafetyPointGoal1-v0/n_timesteps_10000/sweep_trial_004"
+}

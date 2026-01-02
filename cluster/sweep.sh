@@ -31,6 +31,6 @@ export CUDA_LAUNCH_BLOCKING=0
 
 export OPTUNA_LOGGING_LEVEL=INFO
 
-srun python scripts/sweep.py sac_goal2_sweep_100k
+srun python scripts/sweep.py ppo_goal1_sweep_10k
 
 echo "End time: $(date)"

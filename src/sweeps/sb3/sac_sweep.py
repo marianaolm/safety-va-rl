@@ -14,7 +14,7 @@ class SACSpec:
             search_space=sweep["search_space"],
         )
 
-    def sample_hyperparams(self, trial):
+    def sample_hyperparams(self, trial): 
         hp = {}
         for k, spec in self.search_space.items():
             kind, *vals = spec

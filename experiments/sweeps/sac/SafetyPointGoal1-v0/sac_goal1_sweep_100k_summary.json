@@ -1,0 +1,12 @@
+{
+  "best_value": -19.742341296775727,
+  "best_params": {
+    "learning_rate": 0.0001020648805575665,
+    "batch_size": 256,
+    "gamma": 0.9589283944256272,
+    "tau": 0.018014853353653024
+  },
+  "best_reward": -3.742341296775728,
+  "best_cost": 16.0,
+  "best_run_dir": "experiments/sac/SafetyPointGoal1-v0/n_timesteps_100000/sweep_trial_004"
+}

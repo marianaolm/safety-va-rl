@@ -19,9 +19,9 @@ cluster/job_*.out
 cluster/job_*.err
 
 # Experiment outputs
-experiments/ppo
-experiments/sac 
-experiments/ppolag 
+# experiments/ppo
+# experiments/sac 
+# experiments/ppolag 
 
 
 # Models / checkpoints

@@ -1,0 +1,18 @@
+{
+  "environment": "SafetyPointGoal2-v0",
+  "algorithm": "sac",
+  "n_episodes": 50,
+  "reward": {
+    "mean": 27.493027863472072,
+    "std": 2.8748277567757996
+  },
+  "episode_length": {
+    "mean": 1000.0
+  },
+  "cost": {
+    "mean": 173.32,
+    "max": 371.0,
+    "unsafe_rate": 1.0
+  },
+  "success_rate": 1.0
+}

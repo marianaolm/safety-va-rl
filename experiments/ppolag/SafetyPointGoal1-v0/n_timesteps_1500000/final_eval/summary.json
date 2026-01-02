@@ -1,0 +1,13 @@
+{
+  "environment": "SafetyPointGoal1-v0",
+  "algorithm": "PPOLag",
+  "checkpoint": "epoch-300.pt",
+  "max_epoch": 300,
+  "n_episodes": 50,
+  "reward_mean": -0.7524001600698138,
+  "reward_std": 8.586659210029197,
+  "episode_length_mean": 1000.0,
+  "cost_mean": 43.52,
+  "cost_max": 213.0,
+  "unsafe_rate": 0.76
+}

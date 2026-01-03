@@ -25,10 +25,10 @@ cluster/job_*.err
 
 
 # Models / checkpoints
-**/model/
-**/*.zip
-**/*.pt
-**/*.pth
+# **/model/
+# **/*.zip
+# **/*.pt
+# **/*.pth
 
 # Logs / training traces
 **/logs/

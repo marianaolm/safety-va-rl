@@ -21,6 +21,6 @@ export EGL_DEVICE_ID=0
 cd "$(git rev-parse --show-toplevel)"
 source .venv/bin/activate
 
-python -m scripts.save_sb3_video sac_1m500k_goal1
+python -m scripts.save_sb3_video ppo_3m600k_goal2_safe
 
 echo "Job finished at: $(date)"

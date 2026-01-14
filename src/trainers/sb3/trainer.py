@@ -6,13 +6,15 @@ from stable_baselines3.common.vec_env import SubprocVecEnv, VecMonitor
 from stable_baselines3.common.utils import set_random_seed
 
 from src.wrappers.SafetyGymSB3Wrapper import SafetyGymSB3Wrapper
+from src.wrappers.FastSafeRewardWrapper import FastSafeRewardWrapper
 from src.trainers.sb3.callbacks import SafetyLoggingCallback
 
 
 def make_env(env_id: str, rank: int, seed: int = 0):
     def _init():
         env = safety_gymnasium.make(env_id)
-        env = SafetyGymSB3Wrapper(env)
+        #env = SafetyGymSB3Wrapper(env)
+        env = FastSafeRewardWrapper(env)
         env.reset(seed=seed + rank)
         return env
     return _init

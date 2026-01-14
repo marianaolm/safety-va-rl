@@ -28,6 +28,6 @@ export OPENBLAS_NUM_THREADS=1
 export NUMEXPR_NUM_THREADS=1
 
 # Run experiment
-srun python -m scripts/train.py ppo_1m500k_goal1
+srun python scripts/train.py ppo_500k
 
 echo "Job finished at: $(date)"

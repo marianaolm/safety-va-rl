@@ -7,12 +7,12 @@ import safety_gymnasium
 from stable_baselines3 import SAC, PPO
 from stable_baselines3.common.vec_env import DummyVecEnv
 
-from src.wrappers.SafetyGymSB3Wrapper import SafetyGymSB3Wrapper
-
+# from src.wrappers.SafetyGymSB3Wrapper import SafetyGymSB3Wrapper
+from src.wrappers.FastSafeRewardWrapper import FastSafeRewardWrapper
 
 def make_env(env_id: str):
     env = safety_gymnasium.make(env_id)
-    env = SafetyGymSB3Wrapper(env)
+    env = FastSafeRewardWrapper(env)
     return env
 
 
@@ -60,7 +60,7 @@ def run_sb3_final_eval(exp: dict, run_dir: Path, n_episodes: int = 50):
             if "cost" in info:
                 ep_cost += float(info["cost"])
 
-            if info.get("goal_met", False):
+            if info.get("goal_met", False) or info.get("is_success", False) or info.get("success", False):
                 ep_success = 1.0
 
             if done_flag:

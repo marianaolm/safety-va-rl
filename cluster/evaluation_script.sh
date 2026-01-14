@@ -30,6 +30,6 @@ export NUMEXPR_NUM_THREADS=1
 export MUJOCO_GL=egl
 
 # Run experiment
-srun python scripts/evaluate.py ppolag_5k
+srun python scripts/evaluate.py ppo_3m600k_goal2_safe
 
 echo "Job finished at: $(date)"

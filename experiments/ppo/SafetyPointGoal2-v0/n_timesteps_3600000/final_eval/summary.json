@@ -1,0 +1,18 @@
+{
+  "environment": "SafetyPointGoal2-v0",
+  "algorithm": "ppo",
+  "n_episodes": 50,
+  "reward": {
+    "mean": -242.49987062215806,
+    "std": 322.4068972079572
+  },
+  "episode_length": {
+    "mean": 202.18
+  },
+  "cost": {
+    "mean": 14.7,
+    "max": 60.0,
+    "unsafe_rate": 0.48
+  },
+  "success_rate": 0.9
+}

@@ -62,6 +62,69 @@ EXPERIMENTS = {
         "n_envs": 8,
     },
 
+    "ppo_1m200k_goal1": {
+        "backend": "sb3",
+        "algorithm": "ppo",
+        "env_id": "SafetyPointGoal1-v0",
+        "timesteps": 1_200_000,
+        "seed": 0,
+        "n_envs": 8,
+    },
+
+    "ppo_3m600k_goal1_safe": {
+        "backend": "sb3",
+        "algorithm": "ppo",
+        "env_id": "SafetyPointGoal1-v0",
+        "timesteps": 3_600_000,
+        "seed": 0,
+        "n_envs": 8,
+    },
+
+    "ppo_3m600k_goal2_safe": {
+        "backend": "sb3",
+        "algorithm": "ppo",
+        "env_id": "SafetyPointGoal2-v0",
+        "timesteps": 3_600_000,
+        "seed": 0,
+        "n_envs": 8,
+    },
+
+    "sac_3m600k_goal1_safe": {
+        "backend": "sb3",
+        "algorithm": "sac",
+        "env_id": "SafetyPointGoal1-v0",
+        "timesteps": 3_600_000,
+        "seed": 0,
+        "n_envs": 8
+    },
+
+    "sac_3m600k_goal2_safe": {
+        "backend": "sb3",
+        "algorithm": "sac",
+        "env_id": "SafetyPointGoal2-v0",
+        "timesteps": 3_600_000,
+        "seed": 0,
+        "n_envs": 8
+    },
+
+    "sac_1m800k_goal1_safe": {
+        "backend": "sb3",
+        "algorithm": "sac",
+        "env_id": "SafetyPointGoal1-v0",
+        "timesteps": 1_800_000,
+        "seed": 0,
+        "n_envs": 8
+    },
+
+    "sac_180k_goal1_safe": {
+        "backend": "sb3",
+        "algorithm": "sac",
+        "env_id": "SafetyPointGoal1-v0",
+        "timesteps": 180_000,
+        "seed": 0,
+        "n_envs": 8
+    },
+
     "sac_1m500k": {
         "backend": "sb3",
         "algorithm": "sac",
@@ -112,6 +175,24 @@ EXPERIMENTS = {
         "algorithm": "ppo",
         "env_id": "SafetyPointGoal2-v0",
         "timesteps": 3_500_000,
+        "seed": 0,
+        "n_envs": 8,
+    },
+
+    "ppo_500k": {
+        "backend": "sb3",
+        "algorithm": "ppo",
+        "env_id": "SafetyPointGoal2-v0",
+        "timesteps": 500_000,
+        "seed": 0,
+        "n_envs": 8,
+    },
+
+    "ppo_4m_goal2_safe": {
+        "backend": "sb3",
+        "algorithm": "ppo",
+        "env_id": "SafetyPointGoal2-v0",
+        "timesteps": 4_000_000,
         "seed": 0,
         "n_envs": 8,
     },

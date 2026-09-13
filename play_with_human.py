@@ -3,6 +3,8 @@ import pygame
 import safety_gymnasium
 from stable_baselines3 import SAC
 
+from src.wrappers.FastSafeRewardWrapper import FastSafeRewardWrapper
+
 
 class KeyboardController:
     def __init__(self, action_space, throttle=0.3, turn=1.0):
@@ -48,11 +50,31 @@ class HumanOverrideWrapper:
             action = policy_action
             human_override = False
 
-        obs, reward, cost, terminated, truncated, info = self.env.step(action)
+        out = self.env.step(action)
+
+        # Safety-Gymnasium: (obs, reward, cost, terminated, truncated, info)
+        if isinstance(out, tuple) and len(out) == 6:
+            obs, reward, cost, terminated, truncated, info = out
+            info = dict(info)
+            info["human_override"] = human_override
+            info["cost"] = float(cost)
+            return obs, reward, cost, terminated, truncated, info
+
+        # Gymnasium: (obs, reward, terminated, truncated, info)
+        if isinstance(out, tuple) and len(out) == 5:
+            obs, reward, terminated, truncated, info = out
+            info = dict(info)
+            info["human_override"] = human_override
+            cost = float(info.get("cost", 0.0))  # if wrapper/env provides cost
+            return obs, reward, cost, terminated, truncated, info
+
+        # Old Gym fallback
+        obs, reward, done, info = out
         info = dict(info)
         info["human_override"] = human_override
-        info["cost"] = cost
-        return obs, reward, cost, terminated, truncated, info
+        cost = float(info.get("cost", 0.0))
+        return obs, reward, cost, bool(done), False, info
+
 
     def render(self):
         return self.env.render()
@@ -96,7 +118,9 @@ def main():
     )
 
     human = KeyboardController(env_raw.action_space, throttle=0.3, turn=1.0)
-    env = HumanOverrideWrapper(env_raw, human)
+    
+    env_wrapped = FastSafeRewardWrapper(env_raw, print_info_keys_once=False)
+    env = HumanOverrideWrapper(env_wrapped, human)
 
     model = SAC.load(MODEL_PATH, device="cpu")
     obs, _ = env.reset()

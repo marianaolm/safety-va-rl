@@ -7,12 +7,14 @@ import safety_gymnasium
 from stable_baselines3 import SAC, PPO
 from stable_baselines3.common.vec_env import DummyVecEnv
 
-# from src.wrappers.SafetyGymSB3Wrapper import SafetyGymSB3Wrapper
-from src.wrappers.FastSafeRewardWrapper import FastSafeRewardWrapper
+# from src.wrappers.FastSafeRewardWrapper import FastSafeRewardWrapper
+from src.wrappers.FastSafeCompleteRewardWrapper import FastSafeCompleteRewardWrapper
+
 
 def make_env(env_id: str):
     env = safety_gymnasium.make(env_id)
-    env = FastSafeRewardWrapper(env)
+    #env = FastSafeRewardWrapper(env)
+    env = FastSafeCompleteRewardWrapper(env)
     return env
 
 
@@ -38,6 +40,11 @@ def run_sb3_final_eval(exp: dict, run_dir: Path, n_episodes: int = 50):
     episode_costs = []
     episode_successes = []
 
+    # Safety breakdown per episode
+    episode_hazard_costs = []
+    episode_hazard_steps = []
+    episode_hazard_entries = []
+
     for _ in range(n_episodes):
         obs = env.reset()
         done = False
@@ -46,6 +53,10 @@ def run_sb3_final_eval(exp: dict, run_dir: Path, n_episodes: int = 50):
         ep_length = 0
         ep_cost = 0.0
         ep_success = 0.0
+
+        haz_cost = 0.0
+        haz_steps = 0
+        haz_entries = 0
 
         while not done:
             action, _ = model.predict(obs, deterministic=True)
@@ -60,8 +71,14 @@ def run_sb3_final_eval(exp: dict, run_dir: Path, n_episodes: int = 50):
             if "cost" in info:
                 ep_cost += float(info["cost"])
 
-            if info.get("goal_met", False) or info.get("is_success", False) or info.get("success", False):
+            if info.get("goal_met_used", False) or info.get("goal_met", False) or info.get("is_success", False) or info.get("success", False):
                 ep_success = 1.0
+
+            # Hazard tracking
+            hz = float(info.get("hazard_cost_step", info.get("cost_hazards_used", 0.0)))
+            haz_cost += hz
+            haz_steps += int(bool(info.get("hazard_in_contact", hz > 0.0)))
+            haz_entries += int(bool(info.get("hazard_entry", False)))
 
             if done_flag:
                 break
@@ -71,12 +88,23 @@ def run_sb3_final_eval(exp: dict, run_dir: Path, n_episodes: int = 50):
         episode_costs.append(ep_cost)
         episode_successes.append(ep_success)
 
+        episode_hazard_costs.append(haz_cost)
+        episode_hazard_steps.append(haz_steps)
+        episode_hazard_entries.append(haz_entries)
+
     env.close()
 
     rewards = np.array(episode_rewards)
     lengths = np.array(episode_lengths)
     costs = np.array(episode_costs)
     successes = np.array(episode_successes)
+
+    haz_costs = np.array(episode_hazard_costs)
+    haz_steps = np.array(episode_hazard_steps)
+    haz_entries = np.array(episode_hazard_entries)
+
+    success_mask = successes.astype(bool)
+    safe_mask = (haz_steps == 0)
 
     results = {
         "environment": env_id,
@@ -88,6 +116,7 @@ def run_sb3_final_eval(exp: dict, run_dir: Path, n_episodes: int = 50):
         },
         "episode_length": {
             "mean": float(lengths.mean()),
+            "time_to_goal_success_only": float(lengths[success_mask].mean()) if success_mask.any() else None,
         },
         "cost": {
             "mean": float(costs.mean()),
@@ -95,6 +124,19 @@ def run_sb3_final_eval(exp: dict, run_dir: Path, n_episodes: int = 50):
             "unsafe_rate": float((costs > 0).mean()),
         },
         "success_rate": float(successes.mean()),
+        "safety_rate": float(safe_mask.mean()),
+        "safe_success_rate": float((success_mask & safe_mask).mean()),
+        "safety_breakdown": {
+            "hazards": {
+                "any_contact_rate": float((haz_steps > 0).mean()),
+                "entries_mean": float(haz_entries.mean()),
+                "contact_steps_mean": float(haz_steps.mean()),
+                "cost_sum_mean": float(haz_costs.mean()),
+                "entries_max": int(haz_entries.max()) if haz_entries.size else 0,
+                "contact_steps_max": int(haz_steps.max()) if haz_steps.size else 0,
+                "cost_sum_max": float(haz_costs.max()) if haz_costs.size else 0.0,
+            },
+        },
     }
 
     out_dir = run_dir / "final_eval"
@@ -103,7 +145,6 @@ def run_sb3_final_eval(exp: dict, run_dir: Path, n_episodes: int = 50):
     out_path = out_dir / "summary.json"
     with open(out_path, "w") as f:
         json.dump(results, f, indent=2)
-
 
     plt.figure(figsize=(8, 6))
     plt.hist(rewards, bins=30, edgecolor="black")
@@ -114,7 +155,6 @@ def run_sb3_final_eval(exp: dict, run_dir: Path, n_episodes: int = 50):
     plt.grid(axis="y", alpha=0.3)
     plt.savefig(out_dir / "reward_histogram.png", dpi=200, bbox_inches="tight")
     plt.close()
-
 
     plt.figure(figsize=(8, 6))
     plt.hist(costs, bins=30, edgecolor="black")
